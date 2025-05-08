@@ -170,34 +170,3 @@ The system is designed as a full-stack web application, allowing citizens to sub
 * **Modularity:** Separating the web serving and application logic into different containers promotes a more organized and maintainable codebase.
 
 This architecture provides a robust and scalable foundation for the Grievance Redressal System, capable of handling the demands of a government-level application while ensuring reliability and ease of management.
-
-graph TD
-    A[Citizen User] --> B{Web Browser};
-    C[Administrator User] --> B;
-
-    B --> D{Web Server (e.g., Apache, Nginx)};
-    D --> E{Application Server (e.g., PHP-FPM)};
-
-    E --> F{Database Server (e.g., MySQL)};
-
-    % Subsystems
-    subgraph "Frontend"
-        B;
-    end
-    subgraph "Backend"
-        D;
-        E;
-        F;
-    end
-
-    % Connections
-    B --HTTP/HTTPS--> D;
-    D --FastCGI/WSGI--> E;
-    E --SQL--> F;
-
-    % Notes
-    note left of B "Complaint Submission\nView Complaint Status"
-    note right of C "Manage Complaints\nUpdate Status"
-    note below D "Handles static content & requests"
-    note below E "Application logic & API endpoints"
-    note below F "Stores user & complaint data"
