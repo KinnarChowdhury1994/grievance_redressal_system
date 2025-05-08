@@ -1,7 +1,7 @@
 # grievance_redressal_system
 A full-stack web application for citizens to submit grievances and for administrators to manage and resolve them.
 
-# Grievance Redressal System - West Bengal Government
+# Grievance Redressal System - Generic
 
 A full-stack web application for citizens to submit grievances and for administrators to manage and resolve them.
 
