@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  # Backend (PHP)
+  backend:
+    build:
+      context: ./backend
+    container_name: grievance-backend
+    ports:
+      - "8080:80"  # Expose backend API on port 8080
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=rootpassword
+      - MYSQL_DATABASE=grievancedb
+    volumes:
+      - ./backend:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - grievance-net
+
+  # Frontend (HTML, Bootstrap, JS)
+  frontend:
+    build:
+      context: ./frontend
+    container_name: grievance-frontend
+    ports:
+      - "8081:80"  # Expose frontend UI on port 8081
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    networks:
+      - grievance-net
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: grievance-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: grievancedb
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persistent data storage for MySQL
+    networks:
+      - grievance-net
+
+  # Prometheus for monitoring
+  prometheus:
+    build: ./monitoring/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - grievance-net
+
+  # Grafana for visualizing Prometheus data
+  grafana:
+    build: ./monitoring/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"  # Access Grafana at port 3000
+    depends_on:
+      - prometheus
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/etc/grafana/dashboards
+    networks:
+      - grievance-net
+
+  # Nginx (or Apache) for frontend serving (if needed)
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    networks:
+      - grievance-net
+
+networks:
+  grievance-net:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local

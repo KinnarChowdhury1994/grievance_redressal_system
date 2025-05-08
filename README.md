@@ -175,3 +175,178 @@ The system is designed as a full-stack web application, allowing citizens to sub
 * **Modularity:** Separating the web serving and application logic into different containers promotes a more organized and maintainable codebase.
 
 This architecture provides a robust and scalable foundation for the Grievance Redressal System, capable of handling the demands of a government-level application while ensuring reliability and ease of management.
+
+<!-- 
+cd frontend
+docker build -t grievance-frontend .
+docker run -d -p 8080:80 --name frontend grievance-frontend
+
+helm install grievance-system ./grievance-helm-chart
+
+ -->
+
+# Grievance Redressal System
+
+## Overview
+
+This is a full-stack grievance redressal system built with:
+
+- **Frontend**: HTML5, Bootstrap, JS, jQuery, AJAX
+- **Backend**: PHP (MySQL for DB)
+- **DevOps**: Docker, Kubernetes (Helm), Jenkins for CI/CD
+- **Monitoring**: Prometheus, Grafana
+
+## Features
+
+- Users can submit complaints and track their status.
+- Admin can update complaint statuses.
+- Real-time reporting using Grafana dashboards.
+
+## Project Structure
+
+- `backend/`: PHP API for grievance management.
+- `frontend/`: HTML, JS, and Bootstrap for user interface.
+- `database/`: MySQL schema and initialization files.
+- `monitoring/`: Prometheus and Grafana configuration for monitoring.
+- `kubernetes/`: Kubernetes deployment and Helm chart.
+- `jenkins/`: Jenkins pipeline for CI/CD.
+
+## Getting Started
+
+### Prerequisites
+
+- Docker
+- Docker Compose
+- Kubernetes
+- Helm
+- Jenkins
+
+### Local Development Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repository/grievance-redressal-system.git
+   cd grievance-redressal-system
+
+
+
+### 2. **Deployment Architecture Diagram** (`deployment_architecture.png`)
+
+- **Frontend** communicates with **Backend (PHP)** through AJAX calls.
+- **Backend** connects to **MySQL Database**.
+- **Docker** containers for local development.
+- **Jenkins** for CI/CD, building and deploying Docker containers.
+- **Kubernetes** for scalable production deployment, with **Helm** charts for automation.
+- **Prometheus** collects metrics, and **Grafana** visualizes them.
+
+This can be done using a diagram tool like [Lucidchart](https://www.lucidchart.com) or [draw.io](https://app.diagrams.net).
+
+### 3. **Setup the Backend (PHP & MySQL)**
+
+The backend consists of PHP scripts for grievance management and a MySQL database.
+Build and start the backend using Docker:
+```bash
+docker-compose up --build backend
+```
+
+### **MySQL Setup**
+The database schema and initialization files are located in the database/ directory. They are automatically loaded when the containers are built.
+
+### **Setup the Frontend (HTML, Bootstrap, JavaScript)**
+The frontend is served via Apache/Nginx, which is configured in the Docker setup.
+Build and start the frontend:
+```bash
+docker-compose up --build frontend
+```
+
+### **Setup Monitoring with Grafana and Prometheus**
+To monitor system health and application metrics, set up Grafana and Prometheus.
+Build and start the monitoring services:
+```bash
+cd monitoring/
+docker-compose up --build
+```
+
+**Access Grafana at: http://localhost:3000**
+ - Username: admin
+ - Password: admin
+
+**Access Prometheus at: http://localhost:9090**
+ - Note: Ensure the correct URL for Prometheus is configured in Grafana’s data source.
+
+
+### **CI/CD Pipeline Setup with Jenkins**
+
+Jenkins is set up to handle Continuous Integration and Continuous Deployment (CI/CD).
+Install Jenkins: Follow the installation guide for Jenkins on your platform: https://www.jenkins.io/doc/book/installing/
+
+Jenkins Pipeline Configuration:
+
+ - Open Jenkins and create a new Pipeline job.
+ - In the job configuration, point to the Jenkinsfile located in the jenkins/ directory.
+ - Ensure Jenkins has access to Docker and Kubernetes.
+
+
+### **Build and Deploy**
+The Jenkins pipeline will automatically build and deploy the application containers. It will:
+Build Docker images.
+Push the images to a container registry (DockerHub, AWS ECR, etc.).
+Deploy to a Kubernetes cluster.
+**Production Setup with Kubernetes and Helm:**
+The application can be deployed to a scalable environment using Kubernetes and Helm.
+Kubernetes Cluster Setup: Ensure your Kubernetes cluster is set up and configured. You can use Minikube for local testing or a managed service like AWS EKS or Google GKE for production.
+**Helm Setup:**
+Install Helm on your system: https://helm.sh/docs/intro/install/
+**Deploy Using Helm:**
+Navigate to the kubernetes/helm-chart/ directory.
+Use Helm to install the chart in your cluster:
+```bash
+helm install grievance-redressal ./helm-chart
+```
+This will deploy the application to the Kubernetes cluster, using the configurations in deployment.yaml and service.yaml.
+
+### **Monitoring Setup**
+
+**Prometheus:** Collects metrics about the system. Prometheus is configured to scrape metrics from the backend and MySQL.
+
+**Grafana:** Visualizes the data collected by Prometheus.
+
+After starting Grafana, configure the Prometheus data source and import the dashboards to view the metrics.
+
+Accessing the Application
+
+#### Frontend: Open the browser and go to http://localhost:8080 to access the grievance redressal system.
+
+#### Grafana Dashboard: Access it at http://localhost:3000 to monitor system performance and metrics.
+
+#### Prometheus: Access it at http://localhost:9090 for querying metrics directly.
+
+## Production Deployment
+
+**Build the Docker Images:**
+
+Use the following command to build the Docker images for the frontend, backend, and monitoring services:
+```bash
+docker-compose build
+```
+ - Push the Images to a Container Registry:
+ - Once the images are built, push them to a container registry (e.g., DockerHub):
+
+```bash
+docker tag backend your-dockerhub-username/grievance-backend
+docker push your-dockerhub-username/grievance-backend
+```
+
+**Kubernetes Setup:**
+Deploy the system using Helm or kubectl:
+
+Ensure Helm is set up on your Kubernetes cluster.
+
+Use the helm install command to deploy the Helm chart.
+
+**SSL (Let's Encrypt):**
+If deploying to production, configure SSL with Let's Encrypt. You can use tools like Certbot to automate SSL certificate generation for your domain.
+
+---
+
+This should complete the remaining sections of your project! Let me know if you need more details or further help with the implementation.

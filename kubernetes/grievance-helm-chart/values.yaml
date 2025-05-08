@@ -1,0 +1,11 @@
+mysql:
+  rootPassword: rootpass
+  database: grievance_db
+  user: grievance_user
+  password: grievance_pass
+
+backend:
+  image: your-dockerhub-username/grievance-backend:latest
+
+frontend:
+  image: your-dockerhub-username/grievance-frontend:latest

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-4">
+    <h2>Complaint Dashboard</h2>
+    <table class="table table-bordered mt-3" id="complaintsTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>District</th>
+          <th>Status</th>
+          <th>Update Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h4 class="mt-5">District Wise Report</h4>
+    <table class="table table-striped" id="reportTable">
+      <thead>
+        <tr>
+          <th>District</th>
+          <th>Resolved</th>
+          <th>Pending</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      fetchComplaints();
+      fetchReport();
+    });
+
+    function fetchComplaints() {
+      $.get('../backend/api/fetch_complaints.php', function(data) {
+        let rows = '';
+        data.forEach(complaint => {
+          rows += `<tr>
+            <td>${complaint.id}</td>
+            <td>${complaint.citizen_name}</td>
+            <td>${complaint.district}</td>
+            <td>${complaint.status}</td>
+            <td>
+              <select class="form-control status-dropdown" data-id="${complaint.id}">
+                <option ${complaint.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                <option ${complaint.status === 'Resolved' ? 'selected' : ''}>Resolved</option>
+              </select>
+            </td>
+          </tr>`;
+        });
+        $('#complaintsTable tbody').html(rows);
+      });
+    }
+
+    $(document).on('change', '.status-dropdown', function() {
+      const complaintId = $(this).data('id');
+      const newStatus = $(this).val();
+      $.post('../backend/api/update_status.php', {
+        id: complaintId,
+        status: newStatus
+      }, function() {
+        fetchComplaints();
+        fetchReport();
+      });
+    });
+
+    function fetchReport() {
+      $.get('../backend/api/fetch_report.php', function(data) {
+        let rows = '';
+        data.forEach(row => {
+          rows += `<tr>
+            <td>${row.district}</td>
+            <td>${row.resolved}</td>
+            <td>${row.pending}</td>
+            <td>${row.total}</td>
+          </tr>`;
+        });
+        $('#reportTable tbody').html(rows);
+      });
+    }
+  </script>
+</body>
+</html>
