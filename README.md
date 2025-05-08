@@ -170,3 +170,45 @@ The system is designed as a full-stack web application, allowing citizens to sub
 * **Modularity:** Separating the web serving and application logic into different containers promotes a more organized and maintainable codebase.
 
 This architecture provides a robust and scalable foundation for the Grievance Redressal System, capable of handling the demands of a government-level application while ensuring reliability and ease of management.
+
+
+grievance-redressal-system/
+│
+├── backend/                    # PHP API
+│   ├── api/
+│   │   ├── submit_complaint.php
+│   │   ├── update_status.php
+│   │   └── fetch_report.php
+│   ├── config/
+│   │   └── db.php
+│   └── Dockerfile
+│
+├── frontend/                   # HTML, Bootstrap, JS, JQuery
+│   ├── index.html
+│   ├── login.html
+│   ├── dashboard.html
+│   └── assets/
+│       ├── css/
+│       └── js/
+│
+├── database/
+│   ├── schema.sql
+│   └── init.sql
+│
+├── docker-compose.yml         # For Dev Deployment
+├── jenkins/
+│   └── Jenkinsfile
+├── kubernetes/
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   └── helm-chart/
+│
+├── monitoring/
+│   ├── grafana/
+│   ├── prometheus/
+│   └── docker-compose.yml
+│
+├── README.md
+└── docs/
+    ├── deployment_architecture.png
+    └── project_documentation.md
